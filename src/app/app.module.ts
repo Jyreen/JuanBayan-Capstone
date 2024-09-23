@@ -17,6 +17,7 @@ import { HomeComponent } from './home';
 import { LandingPageComponent } from './landing-page'; // Correct path
 import { TeamMemberComponent } from './team-member/about-us.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';  // Import NgbModule for Bootstrap components
+import { CampaignComponent } from './campaign/campaign.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';  // Import NgbModule for
         NgbModule
     ],
     declarations: [
+        CampaignComponent,
         AppComponent,
         AlertComponent,
         HomeComponent,

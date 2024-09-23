@@ -16,15 +16,11 @@ import {
 } from "./chunk-2J7VHZNX.js";
 import {
   iosTransitionAnimation
-} from "./chunk-2QWRM6MR.js";
+} from "./chunk-NL7CPSYB.js";
 import {
   mdTransitionAnimation
-} from "./chunk-7LKW4V7L.js";
+} from "./chunk-OJOS5RBB.js";
 import {
-  __awaiter,
-  __decorate,
-  __generator,
-  __spreadArray,
   bootstrapLazy,
   componentOnReady as componentOnReady2,
   createAnimation as createAnimation2,
@@ -35,7 +31,13 @@ import {
   initialize,
   isPlatform as isPlatform2,
   printIonWarning as printIonWarning2
-} from "./chunk-NR554Z3W.js";
+} from "./chunk-6JV5726G.js";
+import {
+  __awaiter,
+  __decorate,
+  __generator,
+  __spreadArray
+} from "./chunk-AOF462FV.js";
 import {
   MaxValidator,
   MinValidator,
@@ -51,7 +53,7 @@ import {
   Router,
   RouterLink,
   UrlSerializer
-} from "./chunk-T2TDYA6W.js";
+} from "./chunk-YEVTI2VF.js";
 import "./chunk-E5STV6AS.js";
 import "./chunk-3ET75EXS.js";
 import {
@@ -128,12 +130,12 @@ import {
   ɵɵviewQuery
 } from "./chunk-2WR6TMOB.js";
 import {
-  fromEvent
-} from "./chunk-UMOB4LYC.js";
-import {
   distinctUntilChanged,
   switchMap
 } from "./chunk-GK724PJ5.js";
+import {
+  fromEvent
+} from "./chunk-UMOB4LYC.js";
 import {
   BehaviorSubject,
   Subject,

@@ -6,15 +6,18 @@ import { AuthGuard } from './_helpers';
 import { Role } from './_models';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { TeamMemberComponent } from './team-member/about-us.component';  // Import TeamMemberComponent
+import { CampaignComponent } from './campaign/campaign.component';
 
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
 const adminModule = () => import('./admin/admin.module').then(x => x.AdminModule);
 const profileModule = () => import('./profile/profile.module').then(x => x.ProfileModule);
 
+
 const routes: Routes = [
     { path: '', redirectTo: '/landing-page', pathMatch: 'full' }, // Redirect root to landing-page
     { path: 'landing-page', component: LandingPageComponent },  // Public route
     { path: 'team-member', component: TeamMemberComponent },  // Add route for About Us
+    { path: 'campaign' , component: CampaignComponent},
 
     // Protected route with AuthGuard for home
     { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
