@@ -27,37 +27,36 @@ export class AddEditComponent implements OnInit {
         this.isAddMode = !this.id;
 
         this.form = this.formBuilder.group({
-            title: ['', Validators.required],
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
-            email: ['', [Validators.required, Validators.email]],
-            role: ['', Validators.required],
-            password: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
-            confirmPassword: ['']
+            acc_firstname: ['', Validators.required],
+            acc_lastname: ['', Validators.required],
+            acc_email: ['', [Validators.required, Validators.email]],
+            acc_pnumber: ['', [Validators.required, Validators.pattern('^[0-9]{10,12}$')]],
+            acc_passwordHash: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
+            acc_role: ['User', Validators.required],
+            acc_image: [null], // this will store the image file
+            confirmPassword: [''],
+            acc_acceptTerms: [false, Validators.requiredTrue] // Ensure this is set to false initially
         }, {
-            validator: MustMatch('password', 'confirmPassword')
+            validator: MustMatch('acc_passwordHash', 'confirmPassword')
         });
+        
 
         if (!this.isAddMode) {
             this.accountService.getById(this.id)
                 .pipe(first())
-                .subscribe(x => this.form.patchValue(x));
+                .subscribe(x => {
+                    this.form.patchValue(x);
+                    // Remove password and confirmPassword fields when editing
+                    this.form.updateValueAndValidity();
+                });
         }
     }
 
-    // convenience getter for easy access to form fields
     get f() { return this.form.controls; }
 
     onSubmit() {
         this.submitted = true;
-
-        // reset alerts on submit
         this.alertService.clear();
-
-        // stop here if form is invalid
-        if (this.form.invalid) {
-            return;
-        }
 
         this.loading = true;
         if (this.isAddMode) {
@@ -66,21 +65,28 @@ export class AddEditComponent implements OnInit {
             this.updateAccount();
         }
     }
+    
 
     private createAccount() {
-        this.accountService.create(this.form.value)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Account created successfully', { keepAfterRouteChange: true });
-                    this.router.navigate(['../'], { relativeTo: this.route });
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
-    }
+    const formData = this.form.value;
+
+    console.log("Creating account with data:", formData); // Log to inspect
+
+    this.accountService.create(formData)
+        .pipe(first())
+        .subscribe({
+            next: () => {
+                this.alertService.success('Account created successfully', { keepAfterRouteChange: true });
+                this.router.navigate(['../'], { relativeTo: this.route });
+            },
+            error: error => {
+                console.error('Create account error:', error);
+                this.alertService.error('Failed to create account');
+                this.loading = false;
+            }
+        });
+}
+
 
     private updateAccount() {
         this.accountService.update(this.id, this.form.value)
@@ -91,7 +97,8 @@ export class AddEditComponent implements OnInit {
                     this.router.navigate(['../../'], { relativeTo: this.route });
                 },
                 error: error => {
-                    this.alertService.error(error);
+                    console.error('Update account error:', error);
+                    this.alertService.error('Failed to update account');
                     this.loading = false;
                 }
             });

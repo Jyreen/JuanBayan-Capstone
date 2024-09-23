@@ -14,6 +14,10 @@ import { AccountService } from './_services';
 import { AppComponent } from './app.component';
 import { AlertComponent } from './_components';
 import { HomeComponent } from './home';
+import { LandingPageComponent } from './landing-page'; // Correct path
+import { TeamMemberComponent } from './team-member/about-us.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';  // Import NgbModule for Bootstrap components
+import { CampaignComponent } from './campaign/campaign.component';
 
 
 @NgModule({
@@ -22,12 +26,16 @@ import { HomeComponent } from './home';
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
-        AppRoutingModule
+        AppRoutingModule,
+        NgbModule
     ],
     declarations: [
+        CampaignComponent,
         AppComponent,
         AlertComponent,
         HomeComponent,
+        LandingPageComponent,
+        TeamMemberComponent
     ],
     providers: [
         { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService] },

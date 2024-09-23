@@ -21,13 +21,15 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/favicon.ico",
+              "src/jb-symbol-logo.ico",
               "src/assets"
             ],
             "styles": [
-              "src/styles.less"
+              
             ],
-            "scripts": []
+            "scripts": [
+              
+            ]
           },
           "configurations": {
             "production": {
@@ -80,19 +82,23 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              "src/favicon.ico",
+              "src/assets/jb-symbol-logo.ico",
               "src/assets"
             ],
             "styles": [
-              "src/styles.less"
+              "src/app/campaign/campaign.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
+
           }
         }
       }
     }
   },
   "cli": {
-    "analytics": "4af7d0ab-ca4e-498f-8db1-9f91a38dacb6"
+    "analytics": "0d7c18f2-6321-406d-9132-36fb734ca41f"
   }
 }

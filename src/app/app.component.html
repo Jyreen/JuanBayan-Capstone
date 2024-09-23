@@ -1,29 +1,98 @@
 <div class="app-container" [ngClass]="{ 'bg-light': account }">
-    <!-- main nav -->
-    <nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="account">
+    <!-- Conditionally display the navbar -->
+    <ng-container *ngIf="showNavbar">
+        <header>
+            <div class="container">
+                <div class="logo">
+                    <a routerLink="/landing-page">
+                        <img src="assets/jb-symbol-logo.png" alt="JuanBayan Logo" style="height: 60px; width: 60px;">
+                    </a>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a routerLink="/landing-page">JUANBAYAN</a></li>
+                        <li><a href="#">SEARCH</a></li>
+                        <li><a routerLink="/campaign">DONATE</a></li> <!-- Route to the campaign page -->
+                        <li><a routerLink="/team-member">ABOUT</a></li>
+                        <li *ngIf="!account"><a routerLink="/account/login-register">SIGN IN</a></li>
 
-        <a class="navbar-brand" href="#">
-            <img src="assets/jb-symbol-logo.png" alt="JuanBayan Logo" height="40">
-        </a>
+                        <!-- Show user's name and dropdown if logged in -->
+                        <li *ngIf="account" class="dropdown">
+                            <a href="javascript:void(0)" (click)="toggleDropdown()">{{ account.acc_firstname || 'USER' }}</a>
+                            <div class="dropdown-content" *ngIf="dropdownVisible">
+                                <a routerLink="/profile">Profile</a>
+                                <a routerLink="/settings">Settings</a>
+                                <a routerLink="/points">Points</a>
+                                <a (click)="logout()">Logout</a>
+                            </div>
+                        </li>
 
-        <a class="navbar-brand" href="#">
-            <span class="ml-2">JUANBAYAN</span>
-        </a>
+                        <!-- Admin link is shown only if the user is an admin -->
+                        <li *ngIf="account?.acc_role === Role.Admin" class="admin-link">
+                            <a routerLink="/admin/dashboard" routerLinkActive="active">Admin</a>
+                        </li>
 
-        <div class="navbar-nav">
-            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item nav-link">Home</a>
-            <a routerLink="/profile" routerLinkActive="active" class="nav-item nav-link">Profile</a>
-            <a *ngIf="account.role === Role.Admin" routerLink="/admin" routerLinkActive="active" class="nav-item nav-link">Admin</a>
-            <a (click)="logout()" class="nav-item nav-link">Logout</a>
-        </div>
-    </nav>
+                        <li><a href="#">CONTACT US</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
 
-    <!-- subnav router outlet -->
-    <router-outlet name="subnav"></router-outlet>
+            <!-- Navbar admin -->
+             
+        </header>
+    </ng-container>
 
     <!-- global alert -->
     <alert></alert>
 
-    <!-- main router outlet -->
+    <!-- main router outlet for other components -->
     <router-outlet></router-outlet>
+    
+    <!--Footer-->
+    <footer class="footer" *ngIf="showNavbar">
+        <div class="footer-container">
+            <div class="footer-left">
+                <img src="assets/jb-symbol-logo.png" alt="JuanBayan Logo" class="footer-logo">
+                <p>Care about people to transforming their lives and exudes a positive impression. Fundraising NGO organizations.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-center">
+                <h3>Get Involved</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Volunteer</a></li>
+                    <li><a href="#">Causes</a></li>
+                    <li><a href="#">Team</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-right">
+                <h3>Utility</h3>
+                <ul>
+                    <li><a href="#">Style Guide</a></li>
+                    <li><a href="#">Licenses</a></li>
+                    <li><a href="#">Password</a></li>
+                    <li><a href="#">404 Page</a></li>
+                    <li><a href="#">Changelog</a></li>
+                </ul>
+
+                <h3>Contact</h3>
+                <p>6000 Cebu City, Philippines</p>
+                <p>help.juanbayan&#64;gmail.com</p>
+                <p>0923 705 8623</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 JuanBayan | A PLATFORM FOR DONATION CROWDFUNDING AND COMMUNITY EMPOWERMENT IN CEBU CITY</p>
+        </div>
+    </footer>
 </div>
+
