@@ -15,7 +15,9 @@ const routes: Routes = [
             { path: '', component: OverviewComponent },
             { path: 'accounts', loadChildren: accountsModule }
         ]
-    }
+    },
+    { path: '', component: SubNavComponent, outlet: 'subnav' }, // Subnav component for navigation
+
 ];
 
 @NgModule({

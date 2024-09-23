@@ -66,7 +66,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             account.isVerified = false;
             account.refreshTokens = [];
             account.acc_totalpoints = account.acc_totalpoints || 0; // Default value
-            account.acc_image = account.acc_image || (account.role === Role.Donor ? '/src/assets/default-profile/27.png' : '/src/assets/default-profile/26.png'); // Default image
+            account.acc_image = account.acc_image || (account.role === Role.User ? '/src/assets/default-profile/27.png' : '/src/assets/default-profile/26.png'); // Default image
             delete account.confirmPassword;
             accounts.push(account);
             localStorage.setItem(accountsKey, JSON.stringify(accounts));
