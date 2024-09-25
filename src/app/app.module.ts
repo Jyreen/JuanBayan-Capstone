@@ -16,7 +16,8 @@ import { AlertComponent } from './_components';
 import { HomeComponent } from './home';
 import { LandingPageComponent } from './landing-page'; // Correct path
 import { TeamMemberComponent } from './team-member/about-us.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';  // Import NgbModule for Bootstrap components
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; 
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';  // Import NgbModule for
         AlertComponent,
         HomeComponent,
         LandingPageComponent,
-        TeamMemberComponent
+        TeamMemberComponent,
+        ProfileComponent
     ],
     providers: [
         { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService] },

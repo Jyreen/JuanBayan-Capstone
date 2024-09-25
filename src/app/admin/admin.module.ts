@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router'; // Import RouterModule
 
 import { AdminRoutingModule } from './admin-routing.module';
-import { SubNavComponent } from './subnav.component';
 import { LayoutComponent } from './layout.component';
 import { OverviewComponent } from './overview.component';
-import { DashboardComponent } from './dashboard/dashboard.component'; // Import the dashboard component
 import { IonicModule } from '@ionic/angular';
 
 @NgModule({
@@ -14,15 +13,12 @@ import { IonicModule } from '@ionic/angular';
         CommonModule,
         ReactiveFormsModule,
         AdminRoutingModule,
-        IonicModule.forRoot()  // Add this line to import IonicModule
-
+        RouterModule, 
+        IonicModule.forRoot()
     ],
     declarations: [
-        SubNavComponent,
         LayoutComponent,
-        OverviewComponent,
-        DashboardComponent // Declare the dashboard component
-
+        OverviewComponent
     ]
 })
 export class AdminModule { }
