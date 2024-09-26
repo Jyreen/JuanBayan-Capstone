@@ -1,0 +1,84 @@
+<div class="container my-5">
+    <h1 class="text-center mb-4">Create and Donate to Campaigns</h1>
+    
+    <!-- Button to Open Campaign Creation Modal -->
+    <div class="text-center mb-4">
+      <button class="btn btn-primary" (click)="openCreateCampaignModal()">Create Campaign</button>
+    </div>
+  
+    <!-- Campaign Listings -->
+    <h2 class="my-4">Campaigns</h2>
+    <div class="row">
+      <div class="col-md-4 mb-4" *ngFor="let campaign of campaigns">
+        <div class="card campaign-card" (click)="showCampaignDetails(campaign)">
+          <img [src]="campaign.Campaign_Image" alt="{{ campaign.Campaign_Name }} Image" class="campaign-image">
+          <div class="card-body">
+            <h5 class="card-title">{{ campaign.Campaign_Name }}</h5>
+            <p class="card-text">{{ campaign.Campaign_Description }}</p>
+            <p><strong>Goal: ${{ campaign.Campaign_TargetFund }}</strong></p>
+            <span class="category-label" [ngClass]="formatCategory(campaign.Campaign_Category)">{{ campaign.Campaign_Category }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal for Campaign Creation -->
+  <ng-template #createCampaignModal>
+    <div class="modal-header">
+      <h5 class="modal-title">Create a Campaign</h5>
+      <button type="button" class="btn-close" (click)="closeCreateCampaignModal()"></button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="createCampaign()">
+        <div class="mb-3">
+          <label for="campaignName" class="form-label">Campaign Name</label>
+          <input type="text" class="form-control" [(ngModel)]="newCampaign.Campaign_Name" name="campaignName" required>
+        </div>
+        <div class="mb-3">
+          <label for="campaignDescription" class="form-label">Campaign Description</label>
+          <textarea class="form-control" [(ngModel)]="newCampaign.Campaign_Description" name="campaignDescription" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="campaignGoal" class="form-label">Campaign Goal ($)</label>
+          <input type="number" class="form-control" [(ngModel)]="newCampaign.Campaign_TargetFund" name="campaignGoal" required>
+        </div>
+        <div class="mb-3">
+          <label for="campaignCategory" class="form-label">Category</label>
+          <select class="form-select" [(ngModel)]="newCampaign.Campaign_Category" name="campaignCategory" required>
+            <option value="">Select a category</option>
+            <option [value]="1">Financial</option>
+            <option [value]="2">Education</option>
+            <option [value]="3">Hospital Bills</option>
+            <option [value]="4">Others</option>
+          </select>
+          <input type="text" class="form-control mt-2" [(ngModel)]="newCampaign.otherCategory" placeholder="Specify other category" *ngIf="newCampaign.Campaign_Category === 4">
+        </div>
+        <div class="mb-3">
+          <label for="campaignImages" class="form-label">Upload Images</label>
+          <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*">
+        </div>
+        <button type="submit" class="btn btn-primary">Create Campaign</button>
+      </form>
+    </div>
+  </ng-template>
+  
+  <!-- Modal for Campaign Details -->
+  <ng-template #campaignDetailsModal>
+    <div class="modal-header">
+      <h5 class="modal-title">Campaign Details</h5>
+      <button type="button" class="btn-close" (click)="closeCampaignDetailsModal()"></button>
+    </div>
+    <div class="modal-body">
+      <img [src]="selectedCampaign?.Campaign_Image" class="full-size-image" alt="Full Size Campaign Image">
+      <h5>{{ selectedCampaign?.Campaign_Name }}</h5>
+      <p>{{ selectedCampaign?.Campaign_Description }}</p>
+      <p><strong>Goal: ${{ selectedCampaign?.Campaign_TargetFund }}</strong></p>
+      <div id="donationSection" *ngIf="!isCampaignCreator(selectedCampaign)">
+        <label for="donationAmount" class="form-label">Donate Amount ($)</label>
+        <input type="number" class="form-control" [(ngModel)]="donationAmount" placeholder="Enter amount">
+      </div>
+      <button class="btn btn-success" (click)="donate()" *ngIf="!isCampaignCreator(selectedCampaign)">Donate</button>
+    </div>
+  </ng-template>
+  

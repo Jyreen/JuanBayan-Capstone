@@ -4,7 +4,7 @@
     "scripts": {
         "ng": "ng",
         "start": "ng serve --open",
-        "build": "ng build",
+        "build": "ng build --aot",
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e"
@@ -35,6 +35,7 @@
         "@angular-devkit/build-angular": "^17.3.5",
         "@angular/cli": "^17.3.2",
         "@angular/compiler-cli": "^17.3.2",
+        "@types/bootstrap": "^5.2.10",
         "@types/jasmine": "^3.5.0",
         "@types/jasminewd2": "^2.0.3",
         "@types/node": "^12.11.1",

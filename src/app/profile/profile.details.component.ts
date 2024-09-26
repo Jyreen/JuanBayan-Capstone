@@ -1,38 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { AccountService } from '@app/_services';
-import { CampaignService } from '@app/_services/campaign.service'; // Assume you have a service to get campaigns
-import { Account } from '@app/_models/account';
-import { Campaign } from '@app/_models/campaign';
+import { AccountService } from '../services/account.service';
 
 @Component({
-  selector: 'app-details',
-  templateUrl: './profile.details.component.html'
+  selector: 'app-profile-details',
+  templateUrl: './profile.details.component.html',
+  styleUrls: ['./profile.details.component.css']
 })
-export class DetailsComponent implements OnInit {
-  account: Account;
-  campaigns: Campaign[];
-  currentSection: string = 'activities'; // Default section
+export class ProfileDetailsComponent implements OnInit {
+  account: any; // Define account type accordingly
+  campaigns: any[]; // Define campaigns type accordingly
 
-  constructor(
-    private accountService: AccountService,
-    private campaignService: CampaignService // Assume a service to fetch campaigns
-  ) {}
+  constructor(private accountService: AccountService) {}
 
-  ngOnInit(): void {
-    // Fetch account data
-    this.account = this.accountService.accountValue;
-
-    // Fetch campaigns data, assuming this is an async call to a backend or service
-    this.campaignService.getCampaignsByAccountId(this.account.id).subscribe((campaigns) => {
-      this.campaigns = campaigns;
+  ngOnInit() {
+    // Assuming you have logic to get the account details
+    this.accountService.getAccountDetails().subscribe((accountDetails) => {
+      this.account = accountDetails;
+      this.loadCampaigns();
     });
   }
 
-  showSection(section: string): void {
-    this.currentSection = section; // Set the current section based on the button clicked
-  }
-
-  openProfileModal() {
-    // Logic to open profile modal, if necessary
+  loadCampaigns() {
+    // Ensure account.id is converted to number if necessary
+    this.accountService.getCampaignsByAccountId(Number(this.account.id)).subscribe((campaigns) => {
+      this.campaigns = campaigns;
+    });
   }
 }

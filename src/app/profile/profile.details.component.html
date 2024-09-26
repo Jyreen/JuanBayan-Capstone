@@ -63,7 +63,7 @@
 <div class="container mt-5">
     <div class="profile-header" (click)="openProfileModal()">
       <!-- Profile Picture -->
-      <img [src]="account.acc_image" alt="Profile Picture">
+      <img [src]="account.acc_image ? account.acc_image : 'assets/default-profile/27.png'" alt="Profile Picture">
       <!-- Profile Name and Role -->
       <h3>{{ account.acc_firstname }} {{ account.acc_lastname }}</h3>
   
