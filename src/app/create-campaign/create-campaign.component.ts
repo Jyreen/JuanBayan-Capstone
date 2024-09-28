@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { CampaignService } from '../_services/campaign.service'; // Update path as necessary
-import { Router } from '@angular/router';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { CampaignService } from '../_services/campaign.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -8,39 +8,63 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './create-campaign.component.html',
   styleUrls: ['./create-campaign.component.css']
 })
-export class CreateCampaignComponent {
+export class CreateCampaignComponent implements OnInit {
   createCampaignForm: FormGroup;
-  selectedFile: File | null = null; // For storing the selected image file
+  selectedFile: File | null = null; 
   loading = false;
   submitted = false;
   errorMessage: string | null = null;
-  campaigns: any[] = []; // Added campaigns property
+  campaigns: any[] = []; 
+  accountId: number = 1; // Replace with logic to get the actual account ID
 
   constructor(
     private formBuilder: FormBuilder,
     private campaignService: CampaignService,
-    private router: Router
+    private modalService: NgbModal,
   ) {
     this.createCampaignForm = this.formBuilder.group({
-      Acc_ID: ['', Validators.required],
       Campaign_Name: ['', Validators.required],
       Campaign_Description: ['', Validators.required],
       Campaign_TargetFund: ['', Validators.required],
       Campaign_Start: ['', Validators.required],
       Campaign_End: ['', Validators.required],
-      Campaign_Status: ['', Validators.required],
       Campaign_Category: ['', Validators.required],
-      Campaign_Feedback: [''], // Optional field
-      Campaign_Image: [null] // For the image file
+      Campaign_Image: [null]
     });
   }
 
-  // Getter for form controls
-  get f() {
-    return this.createCampaignForm.controls;
+  ngOnInit() {
+    this.loadCampaigns(); // Load campaigns on initialization
   }
 
-  // Handle file selection
+  loadCampaigns() {
+    this.campaignService.getCampaignsByAccountId(this.accountId).subscribe(
+      (data: any[]) => {
+        this.campaigns = data; // Populate campaigns array
+      },
+      (error) => {
+        console.error('Error fetching campaigns', error);
+        this.errorMessage = 'Error fetching campaigns: ' + error.message;
+      }
+    );
+  }
+
+  openCreateCampaignModal(content: TemplateRef<any>) {
+    this.modalService.open(content, { size: 'lg' });
+  }
+
+  closeCreateCampaignModal() {
+    this.resetForm(); // Reset form on closing
+    this.modalService.dismissAll();
+  }
+
+  resetForm() {
+    this.createCampaignForm.reset();
+    this.selectedFile = null;
+    this.errorMessage = null;
+    this.submitted = false;
+  }
+
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -48,49 +72,50 @@ export class CreateCampaignComponent {
     }
   }
 
-  // Open create campaign modal
-  openCreateCampaignModal() {
-    // Logic to open the modal (if applicable)
-    console.log("Open create campaign modal");
-  }
-
-  // Form submit function
   createCampaign() {
     this.submitted = true;
-
-    // Stop if form is invalid
     if (this.createCampaignForm.invalid) {
-      return;
+      return; // Stop if form is invalid
     }
 
     this.loading = true;
 
-    // Prepare form data for submission
     const formData = new FormData();
-    formData.append('Acc_ID', this.f['Acc_ID'].value);
-    formData.append('Campaign_Name', this.f['Campaign_Name'].value);
-    formData.append('Campaign_Description', this.f['Campaign_Description'].value);
-    formData.append('Campaign_TargetFund', this.f['Campaign_TargetFund'].value);
-    formData.append('Campaign_Start', this.f['Campaign_Start'].value);
-    formData.append('Campaign_End', this.f['Campaign_End'].value);
-    formData.append('Campaign_Status', this.f['Campaign_Status'].value);
-    formData.append('Campaign_Category', this.f['Campaign_Category'].value);
-    formData.append('Campaign_Feedback', this.f['Campaign_Feedback'].value || '');
+    for (const key in this.createCampaignForm.controls) {
+      formData.append(key, this.createCampaignForm.get(key)?.value);
+    }
 
-    // Append the image file if selected
+    formData.append('Acc_ID', this.accountId.toString());
+    formData.append('Campaign_Status', '0'); // Default status to Pending
+
     if (this.selectedFile) {
       formData.append('Campaign_Image', this.selectedFile, this.selectedFile.name);
     }
 
-    // Call the create method from the CampaignService
     this.campaignService.create(formData).subscribe(
-      (response) => {
-        this.router.navigate(['/campaigns']); // Redirect to the campaign list after success
-      },
-      (error) => {
-        this.errorMessage = error;
+      response => {
         this.loading = false;
+        this.submitted = false;
+        this.closeCreateCampaignModal();
+        this.loadCampaigns(); // Refresh the campaign list
+      },
+      error => {
+        this.loading = false;
+        this.errorMessage = error.message; 
       }
     );
+  }
+
+  getImagePath(image: string): string {
+    return image ? `http://localhost:4000/${image}` : 'assets/'; 
+  }
+
+  formatCategory(category: number): string {
+    switch (category) {
+      case 1: return 'category-financial';
+      case 2: return 'category-education';
+      case 3: return 'category-hospital';
+      default: return 'category-other';
+    }
   }
 }

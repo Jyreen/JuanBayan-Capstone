@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from './_helpers';
 import { Role } from './_models';
-
+//import { HomeComponent } from './home';
 // router
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { TeamMemberComponent } from './team-member/about-us.component';
@@ -25,11 +25,11 @@ const routes: Routes = [
     // Protected route with AuthGuard for home
     // { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
 
+    // Protected profile routes, only for authenticated users
+    { path: 'profile', loadChildren: profileModule, canActivate: [AuthGuard] },
+
     // Lazy-loaded account module
     { path: 'account', loadChildren: accountModule },
-
-    // Protected profile routes
-    { path: 'profile', loadChildren: profileModule, canActivate: [AuthGuard] },
 
     // Admin routes
     { path: 'admin', loadChildren: adminModule, canActivate: [AuthGuard], data: { roles: [Role.Admin] } },   

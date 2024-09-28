@@ -11,5 +11,8 @@ export class Account {
     acc_totalpoints: number = 0;
     acc_role: Role;
     acc_acceptTerms: string;
+    acc_resetToken?: string;
     jwtToken?: string;
+    refreshToken?: string;
+
 }

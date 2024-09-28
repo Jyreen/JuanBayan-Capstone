@@ -29,8 +29,8 @@
                         <li><a routerLink="/event">Event</a></li>
                         <li><a href="/team-member">About us</a></li>
                         <li *ngIf="!account"><a routerLink="/account/login-register">Sign in</a></li>
-                        <li>
-                            <a href="#" class="desktop-item">{{ account.acc_firstname || 'User' }}</a>
+                        <li>  
+                            <a routerLink="/profile" class="desktop-item">{{ account.acc_firstname || 'User' }}</a>
                             <input type="checkbox" id="showDrop">
                             <ul class="drop-menu">
                                 <li><a routerLink="/profile">Profile</a></li>
@@ -84,9 +84,10 @@
                     <!-- Admin link is shown only if the user is an admin -->
                     <ul *ngIf="account?.acc_role === 'Admin'" class="nav-links">
                         <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
-                        <li><a routerLink="/admin/overview">Admin Home</a></li>
-                        <li><a routerLink="/admin/campaign">Campaign List</a></li>
-                        <li><a routerLink="/admin/event">Event List</a></li>
+                        <li><a routerLink="/admin">Admin Home</a></li>
+                        <li><a routerLink="/admin/campaigns">Campaign</a></li>
+                        <li><a routerLink="/admin/events">Event</a></li>
+                        <li><a routerLink="/admin/rewards">Reward</a></li>
                         <li *ngIf="!account"><a routerLink="/account/login-register">Sign in</a></li>
                         <li>
                             <a href="#" class="desktop-item">{{ account.acc_firstname || 'Admin' }}</a>

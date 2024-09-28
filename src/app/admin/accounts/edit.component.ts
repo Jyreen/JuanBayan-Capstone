@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-
 import { AccountService, AlertService } from '@app/_services';
-import { MustMatch } from '@app/_helpers';
 
-@Component({ templateUrl: 'update.component.html' })
-export class UpdateComponent implements OnInit {
-    account = this.accountService.accountValue;
-    form: FormGroup;
-    loading = false;
-    submitted = false;
-    deleting = false;
+@Component({
+    templateUrl: './edit.component.html' // Make sure the path is correct
+})
+export class EditComponent implements OnInit {
+    account = this.accountService.accountValue; // Retrieve account value
+    form: FormGroup; // Define form group
+    loading = false; // Loading state
+    submitted = false; // Form submission state
+    deleting = false; // Deleting state
 
     constructor(
         private formBuilder: FormBuilder,
@@ -23,16 +23,15 @@ export class UpdateComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        console.log('Account ID:', this.account.id); // Check if the ID is set correctly
+        // Initialize the form
         this.form = this.formBuilder.group({
-            acc_firstname: [this.account.acc_firstname, Validators.required],
-            acc_lastname: [this.account.acc_lastname, Validators.required],
-            acc_pnumber: [this.account.acc_pnumber, [Validators.pattern('^[0-9]{10,12}$')]],
-            acc_passwordHash: ['', [Validators.minLength(6)]],
-            confirmPassword: ['']
-        }, {
-            validator: MustMatch('acc_passwordHash', 'confirmPassword')
-        });
+            firstname: [this.account.acc_firstname, Validators.required],
+            lastname: [this.account.acc_lastname, Validators.required],
+            email: [this.account.acc_email, [Validators.required, Validators.email]],
+            phone: [this.account.acc_pnumber, [Validators.required, Validators.pattern('^[0-9]{10,12}$')]],
+            role: [this.account.acc_role, Validators.required],
+           // status: [this.account.acc_status, Validators.required]
+        });     
     }
 
     // Convenience getter for easy access to form fields
@@ -40,25 +39,28 @@ export class UpdateComponent implements OnInit {
 
     onSubmit() {
         this.submitted = true;
-
         this.alertService.clear();
-
+    
         if (this.form.invalid) {
+            console.log('Form invalid:', this.form.errors);
             return;
         }
-
+    
         if (!this.account.id) {
             console.error('Account ID is missing');
             this.alertService.error('Account ID is missing');
             this.loading = false;
             return;
         }
-
+    
         this.loading = true;
+        console.log('Submitting form data:', this.form.value); // Log the form data being submitted
+    
         this.accountService.update(this.account.id, this.form.value)
             .pipe(first())
             .subscribe({
-                next: () => {
+                next: (updatedAccount) => {
+                    console.log('Updated account:', updatedAccount); // Log updated account details
                     this.alertService.success('Update successful', { keepAfterRouteChange: true });
                     this.router.navigate(['../'], { relativeTo: this.route });
                 },
@@ -70,13 +72,19 @@ export class UpdateComponent implements OnInit {
     }
 
     onDelete() {
-        if (confirm('Are you sure?')) {
+        if (confirm('Are you sure you want to delete this account?')) {
             this.deleting = true;
             this.accountService.delete(this.account.id)
                 .pipe(first())
                 .subscribe(() => {
                     this.alertService.success('Account deleted successfully', { keepAfterRouteChange: true });
+                    this.router.navigate(['/accounts']);
                 });
         }
+    }
+
+    // Define the goBack method
+    goBack() {
+        this.router.navigate(['../'], { relativeTo: this.route });
     }
 }

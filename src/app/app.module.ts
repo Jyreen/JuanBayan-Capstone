@@ -11,7 +11,7 @@ import { fakeBackendProvider } from './_helpers';
 import { AppRoutingModule } from './app-routing.module';
 import { JwtInterceptor, ErrorInterceptor, appInitializer } from './_helpers';
 import { AccountService } from './_services';
-
+import { AdminModule } from './admin/admin.module';
 
 
 import { AppComponent } from './app.component';
@@ -23,6 +23,8 @@ import { TeamMemberComponent } from './team-member/about-us.component';
 import { CampaignComponent } from './campaign/campaign.component';
 import { CreateCampaignComponent } from './create-campaign/create-campaign.component' 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; 
+import { ProfileComponent } from './profile/profile.component';
+
 
 @NgModule({
     imports: [
@@ -32,7 +34,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         HttpClientModule,
         AppRoutingModule,
         NgbModule,
-        RouterModule
+        RouterModule,
+        AdminModule
     ],
     declarations: [
         AppComponent,
@@ -40,7 +43,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         LandingPageComponent,
         TeamMemberComponent,
         CampaignComponent,
-        CreateCampaignComponent
+        CreateCampaignComponent,
+        ProfileComponent
     ],
     providers: [
         { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService] },

@@ -48,17 +48,20 @@ export class AppComponent implements OnInit, OnDestroy {
       '/account/verify-email',
       '/account/reset-password'
     ];
+    
+    /*
     const adminRoutes = [
       '/admin',
-      '/admin/dashboard',
+      '/admin/campaigns',
       '/admin/accounts' // Add your admin routes here
     ];
 
+    */
     // Determine visibility based on the current URL
     const isAccountRoute = accountRoutes.some(route => url.includes(route));
-    const isAdminRoute = adminRoutes.some(route => url.includes(route));
+    // const isAdminRoute = adminRoutes.some(route => url.includes(route));
 
-    if (isAccountRoute || isAdminRoute) {
+    if (isAccountRoute /*|| isAdminRoute*/) {
       this.showNavbar = false;
     } else if (url.includes('/landing-page') || url.includes('/home')) {
       this.showNavbar = true;

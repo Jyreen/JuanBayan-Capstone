@@ -1,0 +1,125 @@
+<!-- Profile Header -->
+<div class="container mt-5">
+  <div class="profile-header" (click)="openProfileModal()">
+      <!-- Profile Picture -->
+      <img [src]="account?.acc_image" alt="Profile Picture" class="rounded-circle">
+      <!-- Profile Name and Role -->
+      <h3>{{ account?.acc_firstname }} {{ account?.acc_lastname }}</h3>
+      <!-- Contact Information -->
+      <p>Email: {{ account?.acc_email }}</p>
+      <p>Phone number: {{ account?.acc_pnumber }}</p>
+  </div>
+
+  <!-- Points and Navigation -->
+  <div class="card shadow-sm mt-4">
+      <div class="card-body text-center">
+          <div class="row">
+              <div class="col-md-3 mb-3">
+                  <button (click)="showSection('activities')" class="nav-button btn btn-outline-primary w-100" [ngClass]="{'active': currentSection === 'activities'}">Your Activities</button>
+              </div>
+              <div class="col-md-3 mb-3">
+                  <button (click)="showSection('events')" class="nav-button btn btn-outline-primary w-100" [ngClass]="{'active': currentSection === 'events'}">Accomplished Events</button>
+              </div>
+              <div class="col-md-3 mb-3">
+                  <button (click)="showSection('campaigns')" class="nav-button btn btn-outline-primary w-100" [ngClass]="{'active': currentSection === 'campaigns'}">Accomplished Campaigns</button>
+              </div>
+              <div class="col-md-3 mb-3">
+                  <button (click)="showSection('rewards')" class="nav-button btn btn-outline-primary w-100" [ngClass]="{'active': currentSection === 'rewards'}">Redeem Rewards</button>
+              </div>
+          </div>
+          <div class="p-3 bg-light rounded mt-4">
+              <h5 class="mb-0">Earned Points</h5>
+              <h3 class="fw-bold">{{ account?.acc_totalpoints }}</h3>
+          </div>
+      </div>
+  </div>
+
+  <!-- Activities Section -->
+  <div *ngIf="currentSection === 'activities'" class="container mt-5">
+      <h3>Your Activities</h3>
+      <p *ngFor="let activity of activities">{{ activity }}</p>
+  </div>
+
+  <!-- Accomplished Events Section -->
+  <div *ngIf="currentSection === 'events'" class="container mt-5">
+      <h3>Accomplished Events</h3>
+      <p *ngFor="let event of events">{{ event }}</p>
+  </div>
+
+  <!-- Accomplished Campaigns Section -->
+  <div *ngIf="currentSection === 'campaigns'" class="container mt-5">
+      <h3>Accomplished Campaigns</h3>
+      <div *ngFor="let campaign of campaigns" class="card shadow-sm mb-3">
+          <div class="card-body">
+              <h4 class="text-danger">{{ campaign.Campaign_Category === 1 ? 'Medical' : 'Other' }}</h4>
+              <h3 class="card-title">{{ campaign.Campaign_Name }}</h3>
+              <p>{{ campaign.Campaign_Description }}</p>
+              <button class="btn btn-primary" (click)="requestToCollect(campaign)">Request To Collect</button>
+          </div>
+      </div>
+  </div>
+
+  <!-- Redeem Rewards Section -->
+  <div *ngIf="currentSection === 'rewards'" class="container mt-5">
+      <div class="card shadow-sm">
+          <div class="card-body">
+              <h5 class="card-title">Redeem Rewards</h5>
+              <table class="table table-striped">
+                  <thead>
+                      <tr>
+                          <th scope="col">Reward</th>
+                          <th scope="col">Description</th>
+                          <th scope="col">Points Required</th>
+                          <th scope="col">Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let reward of rewards">
+                          <td>{{ reward.name }}</td>
+                          <td>{{ reward.description }}</td>
+                          <td>{{ reward.points }}</td>
+                          <td><button class="btn btn-primary" [disabled]="account?.acc_totalpoints < reward.points" (click)="redeemReward(reward)">Redeem</button></td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Modal for Profile -->
+<div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="profileModalLabel">Profile Details and Change Password</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center">
+              <img [src]="account?.acc_image" alt="Profile Picture" class="rounded-circle mb-3" width="120" height="120">
+              <h3>{{ account?.acc_firstname }} {{ account?.acc_lastname }}</h3>
+              <p>Email: {{ account?.acc_email }}</p>
+              <p>Phone number: {{ account?.acc_pnumber }}</p>
+              <h3 class="fw-bold">{{ account?.acc_totalpoints }}</h3>
+
+
+              <!-- Change Password Form -->
+              <form (ngSubmit)="changePassword()">
+                  <div class="mb-3 text-start">
+                      <label for="currentPassword" class="form-label">Current Password</label>
+                      <input type="password" class="form-control" id="currentPassword" [(ngModel)]="password.current" name="currentPassword">
+                  </div>
+                  <div class="mb-3 text-start">
+                      <label for="newPassword" class="form-label">New Password</label>
+                      <input type="password" class="form-control" id="newPassword" [(ngModel)]="password.new" name="newPassword">
+                  </div>
+                  <div class="mb-3 text-start">
+                      <label for="confirmPassword" class="form-label">Confirm Password</label>
+                      <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="password.confirm" name="confirmPassword">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Change Password</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>

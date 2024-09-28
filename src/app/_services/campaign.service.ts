@@ -8,13 +8,17 @@ import { environment } from '../../environments/environment'; // Import environm
   providedIn: 'root'
 })
 export class CampaignService {
-  private baseUrl = `${environment.apiUrl}/campaign`; // Use the environment variable for the base API URL
+  private baseUrl = `${environment.apiUrl}/campaigns`; // Use the environment variable for the base API URL
 
   constructor(private http: HttpClient) { }
 
   // Create a new campaign with form data (including image)
   create(formData: FormData): Observable<Campaign> {
     return this.http.post<Campaign>(`${this.baseUrl}`, formData);
+  }
+
+  updateCampaign(id: string, formData: FormData): Observable<Campaign> {
+    return this.http.put<Campaign>(`${this.baseUrl}/${id}`, formData);
   }
 
   // Get all campaigns
@@ -25,11 +29,6 @@ export class CampaignService {
   // Get a campaign by ID
   getById(id: number): Observable<Campaign> {
     return this.http.get<Campaign>(`${this.baseUrl}/${id}`);
-  }
-
-  // Update a campaign
-  update(id: number, formData: FormData): Observable<Campaign> {
-    return this.http.put<Campaign>(`${this.baseUrl}/${id}`, formData);
   }
 
   // Delete a campaign
@@ -47,8 +46,13 @@ export class CampaignService {
     return this.http.put<Campaign>(`${this.baseUrl}/${id}/reject`, {});
   }
 
+  // Update Campaign Status (Generic function for both approval and rejection)
+  updateCampaignStatus(campaignId: number, status: number): Observable<Campaign> {
+    return this.http.put<Campaign>(`${this.baseUrl}/${campaignId}/status`, { Campaign_Status: status });
+  }
+
+  // Get campaigns by account ID
   getCampaignsByAccountId(accountId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/account/${accountId}`);
   }
-  
 }
